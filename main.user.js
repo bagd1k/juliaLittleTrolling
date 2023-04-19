@@ -1,17 +1,17 @@
 // ==UserScript==
 // @name        juliaLittleTrolling
 // @match       https://rivalregions.com/
-// @author      bagd1k, Setux
+// @author      bagd1k
 // @description something funny for Ryodan. Don't forget, thats agile.
 // @version     1.4.8.8
 // ==/UserScript==
- 
+
 const darknessUrl = "https://darkness-active-missions.onrender.com/orders";
 const minute = 1;
- 
+
 function vote(article) {
     let articleId = article.split('')
-    const action = Number(!(articleId.pop()))
+    const action = Number(!(Number(articleId.pop())))
     articleId.push(action)
     article = articleId.join('')
     $.ajax({
@@ -28,13 +28,13 @@ function vote(article) {
         },
     });
 }
- 
- 
- 
+
+
+
 function getArticles() {
     $.get(darknessUrl, function (data) {
         console.log("Missions", data);
- 
+
         if (data.length == 0) {
             localStorage.setItem("darkness-last-vote", c());
         } else {
@@ -52,23 +52,23 @@ function getArticles() {
         }
     });
 }
- 
- 
+
+
 function saveVoted(article) {
     let voted = getVoted();
- 
+
     if (!voted) {
         voted = [];
     }
- 
+
     if(!voted.includes(article)){
         voted.push(article);
- 
+
         localStorage.setItem("voted", JSON.stringify(voted));
     }
- 
+
 }
- 
+
 function getVoted() {
     const tempVoted = localStorage.getItem("voted");
     let voted
@@ -80,14 +80,17 @@ function getVoted() {
     }
     return voted
 }
- 
+
 $(document).ready(function () {
     const lastVote = localStorage.getItem("darkness-last-vote");
     if (c() - lastVote >= minute * 60 * 1000) {
         getArticles();
     }
- 
+
     setInterval(() => {
         getArticles();
     }, minute * 60 * 1000);
 });
+
+
+
